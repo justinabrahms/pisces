@@ -16,7 +16,6 @@ class TestCommand(Command):
 
         raise SystemExit(
             subprocess.call([sys.executable,
-                             # Turn on deprecation warnings
                              '-m',
                              'pisces.test']))
 
