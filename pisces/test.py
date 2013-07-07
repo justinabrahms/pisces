@@ -1,10 +1,10 @@
 import functools
-from unittest import TestCase, skip
+import unittest
 from mock import Mock
 from pisces import Route, AppContainer, Router
 
 
-class EndpointTests(TestCase):
+class EndpointTests(unittest.TestCase):
     def test_compile_regex__regex_compile_returns_regex_like_thing(self):
         e = Route('/', None, None)
         self.assertTrue(hasattr(e._compile_regex('/'), 'match'))
@@ -19,7 +19,7 @@ class EndpointTests(TestCase):
         e = Route(url, None, None)
         self.assertTrue(e._re.match("/testing/"))
 
-    @skip("Skipped failing test which allows raw regexp usage.")
+    @unittest.skip("Skipped failing test which allows raw regexp usage.")
     def test_compile_regex__cant_match_raw_regex_syntax(self):
         url = "/foo(.*)bar"
         e = Route(url, None, None)
@@ -85,7 +85,7 @@ class MockRequest(object):
         self.form = {}
 
 
-class AppContainerTests(TestCase):
+class AppContainerTests(unittest.TestCase):
     def setUp(self):
         self.app_container = AppContainer(None)
         self.mock_request = MockRequest()
@@ -164,7 +164,8 @@ class AppContainerTests(TestCase):
             functools.partial(func), self.mock_request)
         self.assertEqual(result, {'post__foo': 'bar'})
 
-class RouterTests(TestCase):
+
+class RouterTests(unittest.TestCase):
     def test_router_with_no_init_raises_typeerror(self):
         self.assertRaises(TypeError, Router)
 
@@ -177,3 +178,7 @@ class RouterTests(TestCase):
         r = Router([matching_router])
         r.match(r, 'test')
         matching_router.handle.assert_called_with(r)
+
+
+if __name__ == '__main__':
+    unittest.main()
