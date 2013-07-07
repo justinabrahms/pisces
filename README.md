@@ -5,7 +5,7 @@ Pisces is a Python web framework with two goals in mind:
 1. Application code should be easy to test.
 2. Components should separate concerns where possible.
 
-"!https://travis-ci.org/justinabrahms/pisces.png!":https://travis-ci.org/justinabrahms/pisces
+[![Build Status](https://travis-ci.org/justinabrahms/pisces.png)](https://travis-ci.org/justinabrahms/pisces)
 
 ## What does it look like?
 
