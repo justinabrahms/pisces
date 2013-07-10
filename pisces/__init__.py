@@ -65,7 +65,7 @@ class Route(object):
     def handle(self, route):
         # TODO(justinabrahms): 3rd call to _match. Should it be cached?
         params = self._match(route)
-        method = getattr(self._instance, self._callback)
+        method = getattr(self._instance, self._callback, None)
         if method is None:
             raise AttributeError(
                 "Unable to find %s on %s. Is something misconfigured?" % (

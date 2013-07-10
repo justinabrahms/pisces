@@ -78,6 +78,31 @@ class EndpointTests(unittest.TestCase):
         self.assertFalse(
             e.handles_route("/NB2HI4B2F4XWO33PM5WGKLTDN5WQ====", 'GET'))
 
+    def test_handle__calls_on_match_with_bound_params(self):
+        class Endpoint(object):
+            args = {}
+
+            def test(self, test):
+                self.args['test'] = test
+
+        e = Endpoint()
+        r = Route("/<test>", e, 'test')
+
+        _partial = r.handle('/foo')
+
+        self.assertEqual(len(e.args), 0)
+        _partial()
+        self.assertEqual(len(e.args), 1)
+        self.assertEqual(e.args['test'], 'foo')
+
+    def test_handle__attribute_error_on_nonexistant_method(self):
+        class Endpoint(object):
+            pass
+
+        e = Route("/<test>", Endpoint(), 'test')
+
+        self.assertRaises(AttributeError, e.handle, '/foo')
+
 
 class MockRequest(object):
     def __init__(self):
@@ -89,6 +114,10 @@ class AppContainerTests(unittest.TestCase):
     def setUp(self):
         self.app_container = AppContainer(None)
         self.mock_request = MockRequest()
+
+    def test__default_handlers_exist(self):
+        a = AppContainer(None)
+        self.assertNotEqual(len(a._arg_providers), 0)
 
     def test_extract_params__returns_nothing_for_no_arg_func(self):
         def func():
