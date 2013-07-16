@@ -118,6 +118,15 @@ class PostProvider(ArgProvider):
     def get_value(self, request, param):
         return request.form.get(param)
 
+class HeaderProvider(ArgProvider):
+    _prefix = "header"
+
+    def get_prefix(self):
+        return self._prefix
+
+    def get_value(self, request, param):
+        return request.headers.get(param)
+
 
 class CookieProvider(ArgProvider):
     _prefix = "cookie"
@@ -183,7 +192,8 @@ class AppContainer(object):
     def __init__(self, router, providers=None, consumers=None):
         self._routes = [router]
         if providers is None:
-            providers = [PostProvider(), GetProvider(), CookieHandler()]
+            providers = [PostProvider(), GetProvider(), CookieHandler(),
+                         HeaderProvider()]
         self._arg_providers = providers
         if consumers is None:
             consumers = [CookieHandler()]
