@@ -22,7 +22,7 @@ class TestCommand(Command):
 
 setup(
     name='pisces',
-    version='0.0.1',
+    version='0.0.2',
     packages=['pisces'],
     url='https://github.com/justinabrahms/pisces',
     license='MIT',
