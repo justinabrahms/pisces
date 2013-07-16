@@ -193,6 +193,57 @@ class AppContainerTests(unittest.TestCase):
             functools.partial(func), self.mock_request)
         self.assertEqual(result, {'post__foo': 'bar'})
 
+    def test_apply_mutations__catches_multiple_params(self):
+        fake_json = {
+            'test__foo': 'bar',
+            'test__bim': 'bop'
+        }
+        consumer = MockConsumer()
+        a = AppContainer(None, consumers=[consumer])
+
+        a.apply_consumer_mutations(fake_json, None)
+
+        self.assertEqual(2, len(consumer.vals))
+        self.assertDictContainsSubset({'foo': 'bar', 'bim': 'bop'},
+                                      consumer.vals)
+
+    def test_apply_mutations__deletes_params_from_original_object(self):
+        fake_json = {
+            'test__foo': 'bar',
+            'doesnt__match': 'baz'
+        }
+        consumer = MockConsumer()
+        a = AppContainer(None, consumers=[consumer])
+
+        a.apply_consumer_mutations(fake_json, None)
+
+        self.assertEqual(len(fake_json), 1)
+        self.assertDictContainsSubset({'doesnt__match': 'baz'}, fake_json)
+        self.assertEqual(len(consumer.vals), 1)
+        self.assertDictContainsSubset({'foo': 'bar'}, consumer.vals)
+
+    def test_apply_mutations__handles_args_without_dunders(self):
+        fake_json = {'no': 'underscores'}
+        consumer = MockConsumer()
+        a = AppContainer(None, consumers=[consumer])
+
+        a.apply_consumer_mutations(fake_json, None)
+
+        self.assertEqual(len(fake_json), 1)
+        self.assertDictContainsSubset({'no': 'underscores'}, fake_json)
+        self.assertEqual(len(consumer.vals), 0)
+
+
+class MockConsumer(object):
+    def __init__(self):
+        self.vals = {}
+
+    def get_prefix(self):
+        return "test"
+
+    def set_value(self, response, param, value):
+        self.vals[param] = value
+
 
 class RouterTests(unittest.TestCase):
     def test_router_with_no_init_raises_typeerror(self):
