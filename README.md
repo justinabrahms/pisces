@@ -153,3 +153,44 @@ of the dict returned by views, run them through the `ResponseConsumer` list
 augmenting the internal `werkzeug.Response` object. Any keys that are matched
 are popped off of the returned dict before sending it back to the client as
 JSON data.
+
+
+## How to Install
+
+Installation should be no different than any other Python package. Merely
+install the package through pip with the command `pip install pisces`.
+
+## How to make changes
+
+To make changes, submit a pull request to me. Your change should include tests,
+updated (or new) documentation relevant to the code changed. You can run tests
+before submitting your code with the command `python setup.py test` from the
+root of the checkout.
+
+## Roadmap
+There are many things to be done, but this is a rough list. Your help would be
+greatly welcomed!
+
+- Abstraction over serialization of requests. We're currently assuming
+  `json.dumps` will handle all serialization needs. We should support
+  serializing dates as well as to other formats.
+- Improvements to the routing scheme to support nesting of routers and better
+  escaping. I'd be open to pulling in a dependency for this.
+- Examples & Tutorials targeting common use cases.
+- A look into the thread safety of the current class structure. We currently
+  have long-lived classes which will likely prove problematic if state is added
+  to them.
+
+## Changelog
+- `v0.2`
+  - Only python 2.7+ is supported.
+  - BUG: Throwing attirbute error on non-existing route matching.
+- `v0.1`: Initial release
+
+## Glossary
+
+TBD. If you have suggestions for what should go in here, please let me know.
+
+## Where to get help
+If you have any questions about pisces, please don't hesitate to email me using
+the email address on my GitHub profile.
